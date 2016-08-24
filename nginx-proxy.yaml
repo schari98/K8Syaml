@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-proxy-dep
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy-dep
+    spec:
+      containers:
+      - name: nginx-proxy-pod
+        image: jwilder/nginx-proxy
+        volumeMounts:
+        - mountPath: /tmp/docker.sock
+          name: test-volume
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+
+      volumes: 
+      - name: test-volume
+        hostPath:
+         path: /var/run/docker.sock
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ser
+  labels:
+
+spec:
+      ports:
+      # port - external port where the service will be available
+      - port: 8080
+      # targetPort - port where the pod provides service
+        targetPort: 80
+      # While using type=NodePort  nodePort is where the pod service is available in all cluster nodes
+      # Not specifying nodePort will let K8s to select one randomly
+      # nodePort: 32321
+        protocol: TCP
+        name: http
+      selector:
+       app: nginx-proxy-dep
+      type: NodePort
+

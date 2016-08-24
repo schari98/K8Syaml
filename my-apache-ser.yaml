@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-apache-ser
+  labels:
+    #run: my-apache
+spec:
+      ports: 
+      # port - external port where the service will be available
+      - port: 8080 
+      # targetPort - port where the pod provides service 
+        targetPort: 80
+      # While using type=NodePort  port where the pod service is available in all cluster nodes 
+        nodePort: 32321
+        protocol: TCP
+        name: http
+      selector:
+       app: my-apache-dep
+      type: NodePort
+
+
+
+

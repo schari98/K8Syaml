@@ -11,7 +11,7 @@ spec:
       # targetPort - port where the pod provides service 
         targetPort: 80
       # While using type=NodePort  port where the pod service is available in all cluster nodes 
-        nodePort: 32321
+      #  nodePort: 32321
         protocol: TCP
         name: http
       selector:
